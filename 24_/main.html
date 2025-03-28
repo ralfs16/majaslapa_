@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Bumba Krīt Spēle</title>
+    </head>
+    <body>
+    <canvas id="myCanvas" width="300" height="300" style="border:1px solid"></canvas> 
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+    
+        var player_x = canvas.width / 2 - 25; // Spēlētāja sākuma pozīcija
+        var player_y = canvas.height - 50; // Spēlētāja Y pozīcija
+        var playerWidth = 50; // Spēlētāja platums
+        var playerHeight = 20; // Spēlētāja augstums
+    
+        var ball_x = Math.random() * (canvas.width - 20); // Bumbas sākuma X pozīcija
+        var ball_y = 0; // Bumbas sākuma Y pozīcija
+        var ballRadius = 20; // Bumbas rādiuss (palielināts, lai labāk atbilstu emoji)
+    
+        var score = 0;
+        var time_remaining = 20; //  taimeris
+    
+        function MyKeyDownHandler(MyEvent) { 
+            if (MyEvent.keyCode == 37 && player_x > 0) {
+                player_x -= 10; // Pārvietot pa kreisi
+            }  
+            if (MyEvent.keyCode == 39 && player_x + playerWidth < canvas.width) {
+                player_x += 10; // Pārvietot pa labi
+            }
+        }
+    
+        function Do_a_Frame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+            ctx.fillStyle = "purple";
+            ctx.font = "20px Arial";
+            ctx.fillText("Score: " + score, 10, 20);
+            ctx.fillText("Time Remaining: " + Math.ceil(time_remaining), 10, 45);
+    
+            // Zīmēt spēlētāju
+            ctx.fillStyle = "grey";
+            ctx.fillRect(player_x, player_y, playerWidth, playerHeight);
+    
+            // Bumbas kustība
+            ball_y += 3; // Bumba krīt
+            
+            // Zīmēt emoji kā bumbu
+            ctx.font = "30px Arial"; // Izvēlieties fonta izmēru
+            ctx.fillText("🏀", ball_x, ball_y); // Izmantojiet emoji (šajā gadījumā basketbola)
+    
+            // Pārbaudīt, vai bumba ir nokritusi
+            if (ball_y > canvas.height) {
+                ball_y = 0; // Atjaunot bumbu uz augšu
+                ball_x = Math.random() * (canvas.width - ballRadius * 2); // Jauna X pozīcija
+            }
+    
+            // Pārbaudīt, vai spēlētājs ir noķēris bumbu
+            if (ball_y >= player_y && ball_x + ballRadius > player_x && ball_x - ballRadius < player_x + playerWidth) {
+                score += 1; // Palielināt punktus
+                ball_y = 0; // Atjaunot bumbu uz augšu
+                ball_x = Math.random() * (canvas.width - ballRadius * 2); // Jauna X pozīcija
+            }
+        }
+    
+        // Taimeris
+        function updateTimer() {
+            if (time_remaining > 0) {
+                time_remaining -= 1 / 40; // Samazināt laiku (25 ms = 1/40 sekundes)
+            } else {
+                clearInterval(gameInterval); // Apturēt spēli, kad laiks beidzas
+                alert("Spēle beigusies! Jūsu rezultāts: " + score);
+            }
+        }
+    
+        // Sākt spēles ciklu
+        var gameInterval = setInterval(function() {
+            Do_a_Frame();
+            updateTimer();
+        }, 25);
+    
+        window.addEventListener("keydown", MyKeyDownHandler); 
+    </script>
+    </body>
+    </html>

@@ -1,0 +1,20 @@
+.containerParent {
+    display: flex;
+    background-color: rgb(223, 219, 219);
+
+}
+
+.containerChild {
+    padding: 10px;
+    border: 3px solid green;
+    margin: 10px
+}
+
+.teksts {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: medium;
+    color: #e50ede;
+    align-items: center;
+
+}
+    
